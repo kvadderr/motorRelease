@@ -13,6 +13,13 @@ const authApi = baseApi.injectEndpoints({
         method: 'POST',
       }),
     }),
+    sendCode: builder.mutation<SignInResponse, SignInDto>({
+      query: payload => ({
+        url: '/auth/sendCode',
+        body: payload,
+        method: 'POST',
+      }),
+    }),
     signUp: builder.mutation<{ accessToken: string; }, SignUpDto>({
       query: dto => ({
         url: '/auth/register',
@@ -45,6 +52,7 @@ const authApi = baseApi.injectEndpoints({
 
 export const {
   useSignInMutation,
+  useSendCodeMutation,
   useSignUpMutation,
   useCurrentUserQuery,
   useAllUsersQuery

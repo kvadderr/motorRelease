@@ -1,6 +1,6 @@
 import { Key, useEffect, useState } from "react";
 
-import { Layout, Flex, Progress, Breadcrumb, Tree, Modal, Button, Result, Checkbox } from "antd";
+import { Layout, Flex, Progress, Breadcrumb, Tree, Modal, Button, Result, Typography } from "antd";
 import type { TreeProps, DirectoryTreeProps } from 'antd/es/tree';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 
@@ -17,10 +17,11 @@ import { allowedRolesAdmin, allowedRolesFranchaisor } from "../constants/allowed
 
 import { selectFolderList, setCurrentFolder } from "../store/slices/folderSlice";
 import { selectFileList } from "../store/slices/fileSlice";
+import { selectFavorite } from "../store/slices/favoriteSlice";
 
 const { Content, Sider } = Layout;
 const { DirectoryTree } = Tree;
-
+const { Text } = Typography;
 import { mergeFilesAndFolders, findNodeByKey, dropTreeNode, findElementsByKey } from "../helpers/tree";
 import { generateBreadcrumb } from "../helpers/breadcrumb";
 import { getLink } from "../helpers/getLink";
@@ -31,6 +32,7 @@ const Dashboard = () => {
 
   const fileData = useAppSelector(selectFileList) || [];
   const folderData = useAppSelector(selectFolderList) || [];
+  const favorite = useAppSelector(selectFavorite) || [];
   const currentWorkspace = useAppSelector(selectCurrentWorkspace);
   const [isModalDocument, setIsModalDocument] = useState(false);
   const [isModalCreateDocument, setIsModalCreateDocument] = useState(false);
@@ -42,7 +44,7 @@ const Dashboard = () => {
   const [linkDoc, setLinkDoc] = useState("");
   const [isEditable, setIsEditable] = useState(false)
   const [urlExit, setUrlExit] = useState("/pub?embedded=true")
-
+console.log(favorite)
   const onDrop: TreeProps['onDrop'] = (info) => {
     setGData(dropTreeNode(info, gData));
   };
@@ -144,6 +146,13 @@ const Dashboard = () => {
               selectedKeys={[selectedKey]}
               selectable={true}
             />
+            <Text>Избранное</Text>
+            <DirectoryTree
+              onSelect={onSelect}
+              treeData={favorite}
+              selectedKeys={[selectedKey]}
+              selectable={true}
+            />
           </Flex>
           <Flex vertical gap={10}>
             <Progress percent={66} />
@@ -152,7 +161,6 @@ const Dashboard = () => {
         </Flex>
       </Sider>
       <Content style={{ padding: 20 }}>
-        <Checkbox onChange={onChange}>Режим чтения</Checkbox>
         {currentWorkspace ? <ContentData /> : <DataStub />}
         <Modal open={isModalDocument} footer={null} onCancel={() => setIsModalDocument(false)} width={1200}>
           <iframe width={"100%"} height={600} frameBorder={0} src={linkDoc}></iframe>

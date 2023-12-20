@@ -10,6 +10,7 @@ import './App.css'
 import { selectIsAuthorized } from './store/slices/authSlice'
 import { Login, Dashboard, Settings, Course } from './pages'
 import { useCurrentUserQuery } from './api/auth'
+import CompleteRegister from './pages/CompleteRegister'
 
 export default () => {
   const isAuth = useAppSelector(selectIsAuthorized);
@@ -28,6 +29,7 @@ export default () => {
           <Route path='/' element={<PublicRoute isAuth={isAuth} />}>
             <Route path='/login' element={<Login />} />
           </Route>
+          <Route path='/complete' element={<CompleteRegister />} />
         </Routes>
       </Suspense>
     </App>

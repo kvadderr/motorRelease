@@ -5,7 +5,7 @@ const RegisterEmployeeForm = () => {
   const [signUp, { isLoading }] = useSignUpMutation();
 
   const onFinish = async (values: any) => {
-    values.role = 'admin';
+    values.role = 'employee';
     await signUp(values).unwrap;
   };
 

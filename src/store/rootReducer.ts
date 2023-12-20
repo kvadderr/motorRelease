@@ -16,6 +16,7 @@ import franchisorSlice from './slices/franchisorSlice';
 import folderSlice from './slices/folderSlice';
 import fileSlice from './slices/fileSlice';
 import groupSlice from './slices/groupSlice';
+import favoriteSlice from './slices/favoriteSlice';
 
 export const rootReducer = combineReducers({
   [authApi.reducerPath]: authApi.reducer,
@@ -33,5 +34,6 @@ export const rootReducer = combineReducers({
   franchisorSlice: franchisorSlice,
   folderSlice: folderSlice,
   fileSlice: fileSlice,
-  groupSlice: groupSlice
+  groupSlice: groupSlice,
+  favoriteSlice: favoriteSlice
 });

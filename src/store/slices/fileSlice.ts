@@ -19,6 +19,13 @@ const FileSlice = createSlice({
     addFile: (state, action) => {
       state.fileList.push(action.payload);
     },
+    changeFileName: (state, action) => {
+      const { id, newName } = action.payload;
+      const fileToUpdate = state.fileList.find(file => file.id === id);
+      if (fileToUpdate) {
+        fileToUpdate.name = newName;
+      }
+    },
   },
   extraReducers: builder => {
     builder
@@ -31,9 +38,9 @@ const FileSlice = createSlice({
   }
 });
 
-export const { addFile } = FileSlice.actions;
+export const { addFile, changeFileName } = FileSlice.actions;
 export const selectFileList = (state: RootState): File[] | null =>
   state.fileSlice.fileList;
-  
+
 
 export default FileSlice.reducer;

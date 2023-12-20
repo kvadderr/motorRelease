@@ -38,12 +38,12 @@ const PrivateLayout = ({ children }: Props) => {
 
   //Получаем роль пользователя
   const role = useAppSelector(selectCurrentRole) || ROLE.EMPLOYEE;
+  console.log(role)
   const currentFranchaisor = useAppSelector(selectCurrentFranchisor);
   const currentWorkspace = useAppSelector(selectCurrentWorkspace);
   const currentPage = useAppSelector(selectCurrentPage);
 
   useEffect(() => {
-    console.log(me);
     socket.emit('join', { "userId": me?.id });
     socket.on('message', function (data) {
       const msg = {
@@ -51,7 +51,6 @@ const PrivateLayout = ({ children }: Props) => {
         message: data.message,
         userId: data.opponentId
       }
-      console.log(msg)
       dispatch(addMessage(msg))
     })
   }, [])

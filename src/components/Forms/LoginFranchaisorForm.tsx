@@ -1,12 +1,20 @@
 import { Form, Input, Button } from "antd"
 import { useState } from "react";
+import { useSendCodeMutation, useSignInMutation } from "../../api/auth";
 
 const LoginFranchaisorForm = () => {
 
   const [isSendPassword, setIsSendPassword] = useState(false);
+  const [signIn] = useSignInMutation();
+  const [sendCode] = useSendCodeMutation();
 
-  const sendForm = () => {
-    setIsSendPassword(true)
+  const sendForm = (values: any) => {
+    if (!isSendPassword) {
+      sendCode(values).unwrap;
+      setIsSendPassword(true)
+    } else {
+      signIn(values).unwrap;
+    }
   }
 
   return (
@@ -15,8 +23,9 @@ const LoginFranchaisorForm = () => {
       layout="vertical"
       initialValues={{ remember: true }}
       autoComplete="off"
+      onFinish={sendForm}
     >
-      <Form.Item name="login">
+      <Form.Item name="email">
         <Input addonBefore="Login or phone" />
       </Form.Item>
       {
@@ -26,7 +35,7 @@ const LoginFranchaisorForm = () => {
         </Form.Item>
       }
       <Form.Item>
-        <Button type="primary" htmlType="submit" onClick={sendForm}>
+        <Button type="primary" htmlType="submit">
           {isSendPassword ? "Войти" : "Отправить код"}
         </Button>
       </Form.Item>

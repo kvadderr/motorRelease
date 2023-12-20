@@ -1,7 +1,7 @@
 import { Form, Input, Button, Select } from "antd"
 import { useSignUpMutation } from "../../api/auth";
 import { useAppSelector } from "../../store/storeHooks";
-import { selectCurrentRole } from "../../store/slices/authSlice";
+import { selectCurrentRole, selectCurrentUser } from "../../store/slices/authSlice";
 import { selectFranchaisorList } from "../../store/slices/franchisorSlice";
 import { ROLE } from "../../@types/entities/Role";
 
@@ -9,16 +9,17 @@ const RegisterFranchaiseeForm = () => {
   const [signUp, { isLoading }] = useSignUpMutation();
 
   const role = useAppSelector(selectCurrentRole) || ROLE.EMPLOYEE;
+  const me = useAppSelector(selectCurrentUser);
   const franchaisorList = useAppSelector(selectFranchaisorList);
   const franchisorData = franchaisorList?.map((franchisor) => ({ label: franchisor.company + "; " + franchisor.FIO, value: franchisor.user_id }));
 
   const onFinish = async (values: any) => {
     values.role = 'franchisee';
     values.franchisee = {
-      franchisor_id: values.franchisor_id,
+      franchisor_id: role !== ROLE.FRANCHISOR ? values.franchisor_id : me?.id
     }
     //if (role === ROLE.FRANCHISOR) values.franchisor_id = 1;
-    await signUp(values).unwrap;
+    signUp(values).unwrap;
   };
 
   return (
